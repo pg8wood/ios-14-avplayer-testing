@@ -39,7 +39,7 @@ class ViewController: UIViewController {
         playerView.player = player
         playerView.playerLayer.frame = view.bounds
 
-        view.addSubview(playerView)
+//        view.addSubview(playerView)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -50,7 +50,19 @@ class ViewController: UIViewController {
             print(error.localizedDescription)
         }
         
-        playerView.player?.play()
+//        playerView.player?.play()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        present(playerViewController, animated: true) { playerViewController.player?.play() }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playbackDidJump), name: .AVPlayerItemTimeJumped, object: nil)
+    }
+    
+    @objc func playbackDidJump() {
+        print("playback jumped")
     }
 
     @objc func didEnterBackground() {
